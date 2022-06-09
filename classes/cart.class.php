@@ -1,6 +1,6 @@
 <?php
 require_once 'database.class.php';
-// session_start();
+session_start();
 
 class Cart extends Database {
 

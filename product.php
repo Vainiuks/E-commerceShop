@@ -36,12 +36,15 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
 <body>
 
-    <div class="productPage">
+    <div class="row1">
         <?php
         foreach ($product as $value) { ?>
 
             <form method="POST">
+            <div class="firstProductsColumn">
                 <img style="width: 350px; height: 400px;" src="<?php echo $value['productImage']; ?>" alt="">
+            </div>
+            <div class="secondProductsColumn">
                 <input class="product_name" style="border:none; background-color:white; width: 600px; cursor: context-menu;" type="text" readonly="readonly" name="product_name" value="<?php echo $value['productName']; ?>"><br>
                 <label>Product price:</label>
                 <input class="product_price" style="border:none; background-color:white; width: 200px; cursor: context-menu;" type="text" readonly="readonly" name="product_price" value="<?php echo $value['productPrice']; ?>"><br>
@@ -52,8 +55,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 <!-- <input class="product_description" style="border:none; background-color:white; width: 200px; cursor: context-menu;" type="text" readonly="readonly" name="product_description" value="<?php echo $value['productDescription']; ?>"><br> -->
                 <label>Enter quantity:</label>
                 <input class="product_quantity" type="text" name="product_quantity" pattern="[0-9]+"><br>
+                <?php if(isset($_SESSION['userID'])) { ?>
+                    <button class="settingsButton" type="submit" name="submit_product">Add to cart</button>
+                <?php } else { 
 
-                <button class="settingsButton" type="submit" name="submit_product">Add to cart</button>
+                } ?>
+            </div>
             </form>
 
         <?php }

@@ -272,13 +272,11 @@ Settings
 }
 
 
-.column3 {
+ .column3 {
   float: left;
   width: 35%;
   padding: 10px;
   height: 300px;
-  /* Should be removed. Only for demonstration */
-  /* position: relative; */
 }
 
 .column4 {
@@ -286,19 +284,18 @@ Settings
   width: 35%;
   padding: 10px;
   height: 330px;
-  /* Should be removed. Only for demonstration */
-}
+} 
 
-.row2 {
+ .row2 {
   margin-left: 41.5vh;
   height: 350px;
-}
+} 
 
-.row2:after {
+/* .row2:after {
   content: "";
   display: table;
   clear: both;
-}
+} */
 
 h2 {
   text-align: center;
@@ -371,7 +368,7 @@ h5 {
 /* Index page css */
 
 .productsContainer {
-  background-color: red;
+  /* background-color: red; */
   width: 60%;
   /* display: flex; */
   /* justify-content: center; */
@@ -379,7 +376,7 @@ h5 {
 }
 
 .firstProductsColumn {
-  background-color: blue;
+  /* background-color: blue; */
   max-width: 400px;
   justify-content: center;
   display: flex;
@@ -404,6 +401,25 @@ h5 {
   text-align: center;
 }
 
+.product_cart_button {
+  background-color: teal;
+  font-family: 'Roboto', sans-serif;
+  color: white;
+  width: 160px;
+  height: 25px;
+  border-radius: 8px;
+}
+
+.cart_product_price {
+ font-size: medium;
+}
+
+.cart_product_name {
+  font-size: large;
+}
+
+
+
 /* Product page css */
 
 .productPage {
@@ -422,3 +438,74 @@ h5 {
 .product_price {
   margin-right: 200px;
 }
+
+/* Index page products css */
+
+.product_name_index {
+  font-size: large;
+  font-family: 'Roboto', sans-serif;
+}
+
+.product_price_index {
+  font-size: medium;
+  font-family: 'Roboto', sans-serif;
+}
+
+.product_submit_index {
+  background-color: teal;
+  font-family: 'Roboto', sans-serif;
+  color: white;
+  width: 100px;
+  height: 30px;
+  border-radius: 8px;
+}
+
+
+.product_filter_index {
+  background-color: teal;
+  font-family: 'Roboto', sans-serif;
+  color: white;
+  width: 80px;
+  height: 25px;
+  border-radius: 8px;
+}
+
+.productsFilter {
+  margin-left: 40px;
+  border-width:1px;
+border-style:solid;
+width: 100px;
+height: 110px;
+/* border-color:black; */
+}
+
+.productsSortBy {
+  margin-top: 10px;
+  margin-left: 40px;
+  border-style:solid;
+  border-width:1px;
+width: 300px;
+height: 40px;
+text-align: center;
+align-items: center;
+
+}
+
+
+.firstProductsColumn {
+  float: left;
+  width: 35%;
+  padding: 10px;
+  height: 300px;
+}
+
+ .row1 {
+  margin-left: 35.5vh;
+  height: 350px;
+} 
+
+/* .row2:after {
+  content: "";
+  display: table;
+  clear: both;
+} */

@@ -21,7 +21,7 @@ if(isset($_POST['add_item_submit'])) {
     $adminController->checkAddProductValues($productName, $productType, $productPrice, $productWeight, $productDescription, $fileName);
     $adminObj->uploadPicture($fileName, $fileTempName, $fileSize, $fileError, $fileType);
 
-    header("location: ../adminpanel.php?updatedadded");
+    header("location: ../adminpanel.php?itemadded");
 }
 if(isset($_POST['update_item_submit'])) {
     $productID = $_POST['productID'];

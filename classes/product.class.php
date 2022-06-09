@@ -37,9 +37,7 @@ class Product extends Database
 
     }
 
-    public function getProductsDescOrder() 
-    {
-        // $dbConn = new Database();
+    public function getProductsDescOrder() {
         $prepareStmt = $this->connect()->prepare('SELECT * FROM product ORDER BY productPrice DESC;');
         $prepareStmt->execute();
 

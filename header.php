@@ -26,10 +26,10 @@ session_start();
         <li><a href="#">About us</a></li>
         <li><a href="#">More</a></li>
 
-        <!-- <form action="index.php" method="POST">
+        <form action="index.php" method="POST">
           <input class="headerInput" type="text" name="search_input" placeholder="Search..">
           <button style="border: none; cursor: pointer; background-color: #55d6aa;" type="submit" name="search_button_submit"><img src="includes/images/searchButton.png" height ="20" width="30" /></button>
-        </form> -->
+        </form>
 
       </ul>
       <div class="rightNav">

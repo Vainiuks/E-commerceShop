@@ -25,18 +25,15 @@ $products = $cartObj->getProductsFromCart();
     <h1 class="shopping-cart-text">Shopping cart</h1>
 
     <div class="productsContainer">
-        <h1>labas</h1>
-
-
-        <div class="product-price">
-                <h4 style="margin-left: 50px;">Total price:</h4>
-                <h4><?php echo $price = $cartObj->getCartPrice(); ?> €</h4>
-        </div>
-
+    
+    <div class="product-price">
+        <h4>Total price: <?php echo $price = $cartObj->getCartPrice(); ?> €</h4>
+    </div>
+    
         <form action="includes/payment.inc.php" method="POST">
-        <label> Enter your home address</label>
+        <label> Enter your home address:</label>
         <input type="visible" name="home_address" value="" placeholder="Enter your address...">
-        <button style="margin-left: 100px;" type="submit" name="confirm_payment" class="submit_button">Confirm payment</button>
+        <button style="margin-left: 20px;" type="submit" name="confirm_payment" class="product_cart_button">Confirm payment</button>
         </form>
 
         <?php
@@ -44,14 +41,14 @@ $products = $cartObj->getProductsFromCart();
 
             $productID = $product['productID'];
         ?>
-            <div class="firstProductsColumn">
+            <div style="margin-top:40px;" class="firstProductsColumn">
 
                 <?php
                 ?>
                 <a href="<?php printf('%s?productID=%s', 'product.php',  $product['productID']); ?>"><img src="<?php echo $product['productImage'] ?>" alt="product1" class="product_image"></a>
                 <div class="text-center">
-                    <h6><?php echo  $product['productName'] ?></h6>
-                    <h6><?php echo  $product['productPrice']." €" ?></h6>
+                    <h6 class="cart_product_name"><?php echo  $product['productName'] ?></h6>
+                    <h6 class="cart_product_price"><?php echo  $product['productPrice']." €" ?></h6>
                     
                     
                     <!-- Quantity form -->
@@ -59,13 +56,13 @@ $products = $cartObj->getProductsFromCart();
                         <input type="hidden" value="<?php echo $product['productID'] ?>" name="productID">
                         <label>Quantity:</label>
                         <input type="visible" name="quantity" value="<?php echo $product['quantity']?>">
-                        <button type="submit" name="change_quantity_button" class="submit_button">Save changes</button>
+                        <button type="submit" name="change_quantity_button" class="product_cart_button">Save changes</button>
                     </form>
 
                     <!-- Delete product from cart -->
                     <form action="includes/cart.inc.php" method="post">
                         <input type="hidden" value="<?php echo $product['productID'] ?>" name="productID">
-                        <button style="margin-top: 100px;" type="submit" name="remove_from_cart_submit" class="submit_button">Remove from Cart</button>
+                        <button style="margin-top: 100px;" type="submit" name="remove_from_cart_submit" class="product_cart_button">Remove from Cart</button>
                     </form>
                 </div>
 
