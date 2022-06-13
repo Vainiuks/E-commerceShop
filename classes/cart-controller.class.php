@@ -1,5 +1,5 @@
 <?php 
-// include 'cart.class.php';
+include 'cart.class.php';
 
 class CartController extends Cart{
 
@@ -27,7 +27,7 @@ class CartController extends Cart{
 
         // $cart = new Cart();
 
-        $this->updateProductQuantity($this->productID, $this->quantity);
+        $this->updateProductQuantityInCart($this->productID, $this->quantity);
     }
 
     private function inputHandling()

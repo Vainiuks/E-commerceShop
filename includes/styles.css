@@ -376,7 +376,6 @@ h5 {
 }
 
 .firstProductsColumn {
-  /* background-color: blue; */
   max-width: 400px;
   justify-content: center;
   display: flex;
@@ -422,7 +421,32 @@ h5 {
 
 /* Product page css */
 
-.productPage {
+
+.product_name {
+  font-size: x-large;
+  font-weight: bold;
+}
+
+.product_price {
+  font-size: medium;
+  margin-top: 20px;
+}
+
+.product_weight {
+  font-size: medium;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.product_description {
+  font-size: medium;
+}
+
+.product_quantity {
+  font-size: medium;
+  margin-top: 20px;
+}
+/* .productPage {
   background-color: grey;
   width: 70%;
   margin: auto;
@@ -437,7 +461,7 @@ h5 {
 
 .product_price {
   margin-right: 200px;
-}
+} */
 
 /* Index page products css */
 

@@ -23,21 +23,13 @@ class AdminController extends Admin {
             exit();
         }
 
-        // if ($this->priceHandling() == false) {
-        //     header("location: ../adminpanel.php?error=wrongpriceformat");
-        //     exit();
-        // }
+        if ($this->priceHandling() == false) {
+            header("location: ../adminpanel.php?error=wrongpriceformat");
+            exit();
+        }
 
         $this->insertNewProduct($this->itemName, $this->itemType, $this->itemPrice, $this->itemWeight, $this->itemDescription, $this->itemImage);
         
-    }
-
-    public function checkUpdateItemValues() {
-
-    }
-
-    public function checkDeleteItemValues() {
-
     }
 
     public function inputHandling() {
@@ -56,7 +48,7 @@ class AdminController extends Admin {
         $result;
 
         if (!empty($this->price)) {
-            if (!preg_match("/^[0-9]*$/", $this->price)) {
+            if (!preg_match("/^[0-9.]*$/", $this->price)) {
                 $result = false;
             } else {
                 $result = true;

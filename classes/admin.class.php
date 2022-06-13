@@ -6,7 +6,6 @@ class Admin extends Database
 
     public function insertNewProduct($itemName, $itemType, $itemPrice, $itemWeight, $itemDescription, $itemImage)
     {
-
         $prepareStmt = $this->connect()->prepare('INSERT INTO product(productType, productName, productPrice, productWeight, productDescription, productImage) 
         VALUES(?,?,?,?,?,?)');
 

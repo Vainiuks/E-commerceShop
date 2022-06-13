@@ -9,14 +9,14 @@ class Cart extends Database {
     public  function addToCart($productID)
     {
         if (!empty($productID)) {
-            $this->insertIntoTempSelectedItems($productID);
+            $this->insertIntoTempCartItems($productID);
         }
     }
 
-    public  function insertIntoTempSelectedItems($productID)
+    public  function insertIntoTempCartItems($productID)
     {
         // $dbConn = new Database();
-        $prepareStmt = $this->connect()->prepare('INSERT INTO productsID(userID, productID, quantity) VALUES (?,?,?);');
+        $prepareStmt = $this->connect()->prepare('INSERT INTO cartItem(userID, productID, quantity) VALUES (?,?,?);');
         $userID = $_SESSION['userID'];
 
         if (!$prepareStmt->execute(array($userID, $productID, 1))) {
@@ -28,10 +28,10 @@ class Cart extends Database {
         $prepareStmt = null;
     }
 
-    public  function insertIntoTempSelectedItemsWithQuantity($productID, $quantity)
+    public  function insertIntoTempCartItemsWithQuantity($productID, $quantity)
     {
         // $dbConn = new Database();
-        $prepareStmt = $this->connect()->prepare('INSERT INTO productsID(userID, productID, quantity) VALUES (?,?,?);');
+        $prepareStmt = $this->connect()->prepare('INSERT INTO cartItem(userID, productID, quantity) VALUES (?,?,?);');
         $userID = $_SESSION['userID'];
 
         if (!$prepareStmt->execute(array($userID, $productID, $quantity))) {
@@ -48,11 +48,11 @@ class Cart extends Database {
         // $dbConn = new Database();
 
         $sql = "
-        SELECT product.productID, product.productType, product.productName, product.productPrice, product.productDescription, product.productImage, productsId.quantity
+        SELECT product.productID, product.productType, product.productName, product.productPrice, product.productDescription, product.productImage, cartItem.quantity
         FROM product
-        LEFT JOIN productsid
-        ON product.productID = productsid.productID
-        WHERE product.productID = productsid.productID";
+        LEFT JOIN cartItem
+        ON product.productID = cartItem.productID
+        WHERE product.productID = cartItem.productID";
 
         $results = $this->mysqli()->query($sql);
 
@@ -70,18 +70,18 @@ class Cart extends Database {
     {
         if ($productID != null) {
             // $dbConn = new Database();
-            $prepareStmt = $this->connect()->prepare("DELETE FROM productsid WHERE productID='" . $productID . "'; ");
+            $prepareStmt = $this->connect()->prepare("DELETE FROM cartItem WHERE productID='" . $productID . "'; ");
             $prepareStmt->execute();
 
             header("Location:" . $_SERVER['PHP_SELF']);
         }
     }
 
-    public function updateProductQuantity($productID, $quantity) {
+    public function updateProductQuantityInCart($productID, $quantity) {
 
             // $dbConn = new Database();
 
-            $prepareStmt = $this->connect()->prepare("UPDATE productsid SET quantity = $quantity WHERE productID = $productID ;");
+            $prepareStmt = $this->connect()->prepare("UPDATE cartItem SET quantity = $quantity WHERE productID = $productID ;");
             $prepareStmt->execute();
 
             header("Location:" . $_SERVER['PHP_SELF']);
@@ -114,12 +114,12 @@ class Cart extends Database {
             exit();
         }
 
-        $this->getReceiptAndProductsID();
+        $this->getReceiptAndSetSelectedProducts();
     }
     
    
 
-    public function getReceiptAndProductsID() {
+    public function getReceiptAndSetSelectedProducts() {
 
         // $dbConn = new Database();
 
@@ -136,7 +136,7 @@ class Cart extends Database {
         }
 
         foreach($productsArr as $product) {
-            $prepareStmt1 = $this->connect()->prepare("INSERT INTO selectedProductID(productID, receiptID, quantity) VALUES(?,?,?);");
+            $prepareStmt1 = $this->connect()->prepare("INSERT INTO selectedProduct(productID, receiptID, quantity) VALUES(?,?,?);");
             
             if(!$prepareStmt1->execute(array($product['productID'], $receiptID['receiptID'], $product['quantity']))) {
                 $prepareStmt1 = null;
@@ -145,15 +145,15 @@ class Cart extends Database {
             }
         }
 
-        $this->clearSelectedProducts();
+        $this->clearCartItems();
 
     }
 
      //Clear rows in temporary table
-     public function clearSelectedProducts() {
+     public function clearCartItems() {
 
         // $dbConn = new Database();
-        $prepareStmt = $this->connect()->prepare('DELETE FROM productsID WHERE selectedID >= 1');
+        $prepareStmt = $this->connect()->prepare('DELETE FROM cartItem WHERE selectedID >= 1');
 
         if($prepareStmt->execute()) {
             header("location: ../index.php?error=none");

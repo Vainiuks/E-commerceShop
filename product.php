@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $quantity = $_POST['product_quantity'];
         $productID = $_GET['productID'];
         $cart = new Cart();
-        $cart->insertIntoTempSelectedItemsWithQuantity($productID, $quantity);
+        $cart->insertIntoTempCartItemsWithQuantity($productID, $quantity);
     }
 }
 
@@ -36,22 +36,22 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
 <body>
 
-    <div class="row1">
+    <div class="row2">
         <?php
         foreach ($product as $value) { ?>
 
             <form method="POST">
-            <div class="firstProductsColumn">
+            <div class="column3">
                 <img style="width: 350px; height: 400px;" src="<?php echo $value['productImage']; ?>" alt="">
             </div>
-            <div class="secondProductsColumn">
+            <div class="column4">
                 <input class="product_name" style="border:none; background-color:white; width: 600px; cursor: context-menu;" type="text" readonly="readonly" name="product_name" value="<?php echo $value['productName']; ?>"><br>
                 <label>Product price:</label>
-                <input class="product_price" style="border:none; background-color:white; width: 200px; cursor: context-menu;" type="text" readonly="readonly" name="product_price" value="<?php echo $value['productPrice']; ?>"><br>
+                <input class="product_price" style="border:none; background-color:white; width: 40px; cursor: context-menu;" type="text" readonly="readonly" name="product_price" value="<?php echo $value['productPrice']; ?>"><label>€</label><br>
                 <label>Product weight:</label>
                 <input class="product_weight" style="border:none; background-color:white; width: 200px; cursor: context-menu;" type="text" readonly="readonly" name="product_weight" value="<?php echo $value['productWeight']; ?>"><br>
-                <label>Product description:</label><br>
-                <textarea style="width:1000px; height:60; border:none; resize:none;" name="product_description" id="" cols="" rows="" readonly><?php echo $value['productDescription']; ?></textarea><br>
+                <label>Product description:</label>
+                <textarea class="product_description" style="width:1000px; height:60; border:none; resize:none;" name="product_description" id="" cols="" rows="" readonly><?php echo $value['productDescription']; ?></textarea><br>
                 <!-- <input class="product_description" style="border:none; background-color:white; width: 200px; cursor: context-menu;" type="text" readonly="readonly" name="product_description" value="<?php echo $value['productDescription']; ?>"><br> -->
                 <label>Enter quantity:</label>
                 <input class="product_quantity" type="text" name="product_quantity" pattern="[0-9]+"><br>

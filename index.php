@@ -9,6 +9,13 @@ $products = array();
 $sortValue = null;
 $searchValue = null;
 
+
+
+echo '<script type="text/javascript">
+       window.onload = function () { alert("Welcome"); } 
+</script>'; 
+
+
 //Search
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     if (isset($_POST['search_button_submit'])) {
