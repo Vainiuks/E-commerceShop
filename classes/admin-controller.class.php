@@ -1,5 +1,5 @@
 <?php
-require_once 'admin.class.php';
+// require_once 'admin.class.php';
 
 class AdminController extends Admin {
 

@@ -291,11 +291,49 @@ Settings
   height: 350px;
 } 
 
-/* .row2:after {
-  content: "";
-  display: table;
-  clear: both;
-} */
+
+.row3 {
+ 
+    margin: 30px auto;
+    display: flex;                 
+    /* flex-direction: row;             */
+    /* flex-wrap: nowrap;               */
+    /* justify-content: space-between;  */
+    width: 50%;
+    /* margin-top: 50px; */
+  }
+
+  hr.solid {
+    width: 50%;
+    border-top: 3px solid #bbb;
+  }
+
+ /* width: 90%;  */
+ /* display: flex; */
+  /* justify-content: center; */
+ /* margin: 20px auto; */
+  
+ /* align-items: center; */
+ /* text-align: centers; */
+
+
+.column8 {
+  /* float: left;
+  width: 15%;
+  padding: 0px;
+  height: 250px; */
+}
+
+.column9 {
+  /* font-family: 'Work Sans', sans-serif; */
+} 
+
+.column10 {
+  /* float: left;
+  width: 35%;
+  padding: 10px;
+  height: 330px; */
+} 
 
 h2 {
   text-align: center;
@@ -421,30 +459,113 @@ h5 {
 
 /* Product page css */
 
+.newbutton {
+  width: 250px;
+  height: 40px;
+  margin-top: 20px;
+  text-align: center;
+  border-radius: 20px;
+  background: black;
+  color: white;
+  margin-left: 140px;
+  cursor: pointer;
+}
+
 
 .product_name {
   font-size: x-large;
   font-weight: bold;
+  font-family: 'Work Sans', sans-serif;
 }
 
 .product_price {
   font-size: medium;
   margin-top: 20px;
+  font-weight: bold;
+  font-family: 'Work Sans', sans-serif;
 }
 
 .product_weight {
   font-size: medium;
   margin-top: 20px;
   margin-bottom: 20px;
+  font-family: 'Work Sans', sans-serif;
 }
 
 .product_description {
   font-size: medium;
+  font-family: 'Work Sans', sans-serif;
 }
 
 .product_quantity {
   font-size: medium;
   margin-top: 20px;
+  font-family: 'Work Sans', sans-serif;
+}
+
+.product_rating {
+  font-family: 'Work Sans', sans-serif;
+}
+
+
+.tip {
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  background: transparent;
+  border: 10px solid #ccc;
+}
+
+.tip-up {
+  top: -25px; /* Same as body margin top + border */
+  left: 10px;
+  border-right-color: transparent;
+  border-left-color: transparent;
+  border-top-color: transparent;
+}
+
+.tip-down {
+  bottom: -25px;
+  left: 10px;
+  border-right-color: transparent;
+  border-left-color: transparent;
+  border-bottom-color: transparent;  
+}
+
+.tip-left {
+  top: 10px;
+  left: -25px;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-bottom-color: transparent;  
+}
+
+.tip-right {
+  top: 10px;
+  right: -25px;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: transparent;  
+}
+
+.dialog_box .body {
+  position: relative;
+  width: 1010px;
+  height: auto;
+  margin: 10px 10px;
+  padding: 5px;
+  background-color: #DADADA;
+  border-radius: 3px;
+  border: 5px solid #ccc;
+}
+
+.body .message {
+  min-height: 30px;
+  border-radius: 3px;
+  font-family: Arial;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #797979;
 }
 /* .productPage {
   background-color: grey;
@@ -489,8 +610,8 @@ h5 {
   background-color: teal;
   font-family: 'Roboto', sans-serif;
   color: white;
-  width: 80px;
-  height: 25px;
+  width: 90px;
+  height: 30px;
   border-radius: 8px;
 }
 
@@ -498,8 +619,8 @@ h5 {
   margin-left: 40px;
   border-width:1px;
 border-style:solid;
-width: 100px;
-height: 110px;
+width: 200px;
+height: 210px;
 /* border-color:black; */
 }
 
@@ -533,3 +654,104 @@ align-items: center;
   display: table;
   clear: both;
 } */
+
+.supClass {
+  background-color: #000000;
+  color: white;
+  /* border-radius: 25px; */
+  /* font-size: large; */
+  /* text-shadow: 2px; */
+  display: inline-block;
+border-radius: 25px;
+padding: 0 6px;
+}
+
+.sidenav {
+  width: 300px;
+  position: fixed;
+  z-index: 1;
+  top: 150px;
+  left: 10px;
+  background: #eee;
+  overflow-x: hidden;
+  padding: 8px 0;
+  height: 800px;
+}
+
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #2196F3;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: #064579;
+}
+
+.main {
+  margin-left: 140px;
+  /* Same width as the sidebar + left position in px */
+  font-size: 28px;
+  /* Increased text to enable scrolling */
+  padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {
+      padding-top: 15px;
+  }
+
+  .sidenav a {
+      font-size: 18px;
+  }
+}
+
+.container {
+  width: 300px;
+}
+
+/* Style the button that is used to open and close the collapsible content */
+.collapsible {
+
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active,
+.collapsible:hover {
+  background-color: #ccc;
+  /* width: 300px; */
+}
+
+/* Style the collapsible content. Note: hidden by default */
+.content {
+  width: 300px;
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+  display: block;
+}
+
+.collapsible:after {
+  content: '\02795';
+  font-size: 13px;
+  color: white;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\2796";
+  /* Unicode character for "minus" sign (-) */
+}

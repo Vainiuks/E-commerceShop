@@ -8,6 +8,7 @@ if (isset($_POST['loginSubmit'])) {
     include '../classes/database.class.php';
     include '../classes/login.class.php';
     include '../classes/login-controller.class.php';
+
     $loginController = new LoginController($username, $password);
 
 

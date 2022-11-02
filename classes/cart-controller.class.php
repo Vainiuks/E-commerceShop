@@ -1,7 +1,7 @@
 <?php 
-include 'cart.class.php';
+require 'cart.class.php';
 
-class CartController extends Cart{
+class CartController extends Cart {
 
     private $productID;
     private $quantity;

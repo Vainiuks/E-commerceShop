@@ -15,7 +15,7 @@ if (isset($_POST['submitChangingEmail'])) {
 
     $settingsController->changeUserEmail();
 
-    header("location: ../settings.php?error=none");
+    header("location: ../settings.php?success=emailchanged");
 }
 
 if (isset($_POST['submitChangingPassword'])) {
@@ -29,7 +29,7 @@ if (isset($_POST['submitChangingPassword'])) {
     $settingsController->changeUserPassword();
 
 
-    header("location: ../settings.php?error=none");
+    header("location: ../settings.php?success=passwordchanged");
 }
 
 if (isset($_POST['submitPersonalInformation'])) {
@@ -39,11 +39,12 @@ if (isset($_POST['submitPersonalInformation'])) {
     $lastName = $_POST['lastName'];
     $phoneNumber = $_POST['phoneNumber'];
     $companyName = $_POST['companyName'];
+    $education = $_POST['education'];
 
 
-    $settingsController->setPersonalInformationValues($firstName, $profession, $lastName, $phoneNumber, $companyName);
+    $settingsController->setPersonalInformationValues($firstName, $profession, $lastName, $phoneNumber, $companyName, $education);
 
     $settingsController->changePersonalInformation();
 
-    header("location: ../settings.php?error=none");
+    header("location: ../settings.php?success=informationchanged");
 }

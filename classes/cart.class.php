@@ -1,10 +1,20 @@
 <?php
 require_once 'database.class.php';
+// require 'send-email.class.php';
 session_start();
-
 class Cart extends Database {
 
     public $productsIDArray;
+    
+    public function getUserID() {
+        $userID = '';
+        if(!empty(isset($_SESSION['userID']))) {
+            $userID = $_SESSION['userID'];
+        } else {
+            $userID = 9; // 9 means, that user purchased items without logging in
+        }
+        return $userID;
+    }
 
     public  function addToCart($productID)
     {
@@ -17,8 +27,7 @@ class Cart extends Database {
     {
         // $dbConn = new Database();
         $prepareStmt = $this->connect()->prepare('INSERT INTO cartItem(userID, productID, quantity) VALUES (?,?,?);');
-        $userID = $_SESSION['userID'];
-
+        $userID = $this->getUserID();
         if (!$prepareStmt->execute(array($userID, $productID, 1))) {
             $prepareStmt = null;
             header("location: ../index.php?error=stmtfailed");
@@ -32,8 +41,7 @@ class Cart extends Database {
     {
         // $dbConn = new Database();
         $prepareStmt = $this->connect()->prepare('INSERT INTO cartItem(userID, productID, quantity) VALUES (?,?,?);');
-        $userID = $_SESSION['userID'];
-
+        $userID = $this->getUserID();
         if (!$prepareStmt->execute(array($userID, $productID, $quantity))) {
             $prepareStmt = null;
             header("location: ../product.php?error=stmtfailed");
@@ -45,14 +53,14 @@ class Cart extends Database {
 
     public function getProductsFromCart()
     {
-        // $dbConn = new Database();
-
+        $userID = $this->getUserID();
         $sql = "
         SELECT product.productID, product.productType, product.productName, product.productPrice, product.productDescription, product.productImage, cartItem.quantity
         FROM product
         LEFT JOIN cartItem
         ON product.productID = cartItem.productID
-        WHERE product.productID = cartItem.productID";
+        WHERE product.productID = cartItem.productID 
+        AND userID = $userID";
 
         $results = $this->mysqli()->query($sql);
 
@@ -67,10 +75,11 @@ class Cart extends Database {
     }
 
     public function deleteProductFromCart($productID)
-    {
+    {   
+       
         if ($productID != null) {
-            // $dbConn = new Database();
-            $prepareStmt = $this->connect()->prepare("DELETE FROM cartItem WHERE productID='" . $productID . "'; ");
+            $userID = $this->getUserID();
+            $prepareStmt = $this->connect()->prepare("DELETE FROM cartItem WHERE productID='" . $productID . "' AND userID='" . $userID . "'; ");
             $prepareStmt->execute();
 
             header("Location:" . $_SERVER['PHP_SELF']);
@@ -80,8 +89,8 @@ class Cart extends Database {
     public function updateProductQuantityInCart($productID, $quantity) {
 
             // $dbConn = new Database();
-
-            $prepareStmt = $this->connect()->prepare("UPDATE cartItem SET quantity = $quantity WHERE productID = $productID ;");
+            $userID = $this->getUserID();
+            $prepareStmt = $this->connect()->prepare("UPDATE cartItem SET quantity = $quantity WHERE productID = $productID AND userID = $userID ;");
             $prepareStmt->execute();
 
             header("Location:" . $_SERVER['PHP_SELF']);
@@ -100,34 +109,32 @@ class Cart extends Database {
         return $price;
     }
 
-    public function formatReceipt($purchaseAddress) {
+
+    public function formatReceipt($firstName, $lastName, $emailAddress, $phoneNumber, $city, $homeAddress, $postalCode) {
 
         // $dbConn = new Database();
-        $purchasedDate = date("Y-m-d h:i:sa");
+        $purchaseDate = date("Y-m-d h:i:sa");
         $totalCartPrice = $this->getCartPrice();
-        $userID = $_SESSION['userID'];
-        $prepareStmt = $this->connect()->prepare('INSERT INTO receipt(purchaseDate, purchaseAddress, totalPrice, userID) VALUES(?,?,?,?); ');
+        $userID = $this->getUserID();
+        $prepareStmt = $this->connect()->prepare('INSERT INTO receipt(purchaseDate, firstName, lastName, emailAddress, phoneNumber, city, homeAddress, postalCode, totalPrice, userID) VALUES(?,?,?,?,?,?,?,?,?,?); ');
 
-        if (!$prepareStmt->execute(array($purchasedDate, $purchaseAddress, $totalCartPrice , $userID))) {
+        if (!$prepareStmt->execute(array($purchaseDate, $firstName, $lastName, $emailAddress, $phoneNumber, $city, $homeAddress, $postalCode, $totalCartPrice, $userID))) {
             $prepareStmt = null;
-            header("location: ../cart.php?error=stmtfailed");
+            header("location: ../payment.php?error=stmtfailed");
             exit();
         }
 
-        $this->getReceiptAndSetSelectedProducts();
+        $this->insertPurchasesProducts();
     }
     
-   
-
-    public function getReceiptAndSetSelectedProducts() {
+    public function insertPurchasesProducts() {
 
         // $dbConn = new Database();
-
-        $userID = $_SESSION['userID'];
+        $mail = new Email;
         $productsArr = array();
         $productsArr = $this->getProductsFromCart();
         $receiptID = array();
-        
+        $userID = $this->getUserID();
         $prepareStmt = $this->connect()->prepare("SELECT receiptID FROM receipt WHERE userID = $userID;");
         $prepareStmt->execute();
 
@@ -144,7 +151,7 @@ class Cart extends Database {
                 exit();
             }
         }
-
+        $mail->sendEmail($productsArr);
         $this->clearCartItems();
 
     }
@@ -153,12 +160,23 @@ class Cart extends Database {
      public function clearCartItems() {
 
         // $dbConn = new Database();
-        $prepareStmt = $this->connect()->prepare('DELETE FROM cartItem WHERE selectedID >= 1');
+        $userID = $this->getUserID();
+        $prepareStmt = $this->connect()->prepare("DELETE FROM cartItem WHERE userID = $userID;");
 
         if($prepareStmt->execute()) {
-            header("location: ../index.php?error=none");
+            // header("location: ../index.php?error=none");
         }
+    }
 
+    public function getCartCount() {
+        $userID = $this->getUserID();
+        $count = array();
+        $prepareStmt = $this->connect()->prepare("SELECT COUNT(*) as numberOfCartItems FROM cartItem WHERE userID = $userID;");
+
+        $prepareStmt->execute();
+        $count = $prepareStmt->fetchColumn();
+        
+        return $count;
     }
 }
 

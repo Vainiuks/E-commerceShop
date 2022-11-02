@@ -1,15 +1,21 @@
 <?php
 
-if(isset($_POST['confirm_payment'])) {
+if(isset($_POST['confirmPayment'])) {
     
-    $home_address = $_POST['home_address'];
+    $firstName = $_POST['firstName'];
+    $lastName = $_POST['lastName'];
+    $emailAddress = $_POST['emailAddress'];
+    $phoneNumber = $_POST['phoneNumber'];
+    $city = $_POST['city'];
+    $homeAddress = $_POST['homeAddress'];
+    $postalCode = $_POST['postalCode'];
 
-    include '../classes/payment-controller.class.php';
-    
-    $payment = new PaymentController($home_address);
+    require_once '../classes/payment-controller.class.php';
 
-    $payment->checkHomeAddress();
+    $payment = new PaymentController($firstName, $lastName, $emailAddress, $phoneNumber, $city, $homeAddress, $postalCode);
 
-    header("location: ../cart.php?error=none");
+    $payment->checkPaymentInput();
+
+    // header("location: ../payment.php?error=none");
 
 }

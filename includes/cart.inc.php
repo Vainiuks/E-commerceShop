@@ -6,7 +6,7 @@ if (isset($_POST['change_quantity_button'])) {
     $productID = $_POST['productID'];
     $quantity = $_POST['quantity'];
     
-    include '../classes/cart-controller.class.php';
+    require '../classes/cart-controller.class.php';
     
     $cart = new CartController($productID, $quantity);
     
@@ -20,7 +20,7 @@ if (isset($_POST['remove_from_cart_submit'])) {
     //Getting data from form
     $productID = $_POST['productID'];
 
-    include '../classes/cart.class.php';
+    require '../classes/cart.class.php';
     $cart = new Cart();
     
     $cart->deleteProductFromCart($productID);

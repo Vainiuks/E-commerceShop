@@ -5,11 +5,12 @@ class Signup extends Database
 
     protected function setUser($username, $password, $email)
     {
-        $prepareStmt = $this->connect()->prepare('INSERT INTO users(userUsername, userPassword, userEmail, userType) VALUES(?,?,?,?);');
+        $registeredDate = date("Y-m-d");
+        $prepareStmt = $this->connect()->prepare('INSERT INTO users(userUsername, userPassword, userEmail, userType, userRegisteredDate) VALUES(?,?,?,?,?);');
 
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        if (!$prepareStmt->execute(array($username, $hashedPassword, $email, "User"))) {
+        if (!$prepareStmt->execute(array($username, $hashedPassword, $email, "User", $registeredDate))) {
             $prepareStmt = null;
             header("location: ../index.php?error=stmtfailed");
             exit();

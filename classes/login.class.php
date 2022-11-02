@@ -1,5 +1,5 @@
 <?php
-
+require_once 'database.class.php';
 session_start();
 
 class Login extends Database
@@ -29,6 +29,7 @@ class Login extends Database
             header("location: ../login.php?error=wrongpassword&username=" . $username);
             exit();
         } elseif ($checkPassword == true) {
+           
             $prepareStmt = $this->connect()->prepare('SELECT * FROM users WHERE userUsername = ? OR userEmail = ? AND userPassword = ?;');
 
             if (!$prepareStmt->execute(array($username, $username, $password))) {
@@ -44,7 +45,6 @@ class Login extends Database
             }
 
             $user = $prepareStmt->fetchAll(PDO::FETCH_ASSOC);
-
 
             $_SESSION['userID'] = $user[0]["userID"];
             $_SESSION['username'] = $user[0]["userUsername"];
@@ -79,5 +79,6 @@ class Login extends Database
         $_SESSION['phoneNumber'] = $personalInfo[0]["phoneNumber"];
         $_SESSION['profession'] = $personalInfo[0]["profession"];
         $_SESSION['companyName'] = $personalInfo[0]["companyName"];
+        $_SESSION['education'] = $personalInfo[0]["education"];
     }
 }

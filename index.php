@@ -5,15 +5,19 @@ require_once 'classes/cart.class.php';
 
 $productObj = new Product();
 $products = array();
+$cartObj = new Cart();
+$currentProductsInCart = array();
+$currentProductsInCart = $cartObj->getProductsFromCart();
 
 $sortValue = null;
 $searchValue = null;
+$_SESSION['minPrice'] = "";
+$_SESSION['maxPrice'] = "";
 
 
-
-echo '<script type="text/javascript">
-       window.onload = function () { alert("Welcome"); } 
-</script>'; 
+// echo '<script type="text/javascript">
+//        window.onload = function () { alert("Welcome"); } 
+// </script>'; 
 
 
 //Search
@@ -29,40 +33,75 @@ if ($searchValue == null) {
 } else if (!empty($searchValue)) {
     $products = $productObj->getProductsBySearchInput($searchValue);
 }
-
 //Sort
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    if (isset($_POST['submit_sort_value'])) {
-        $searchValue = "smth";
-        $sortValue = $_POST['sortBy'];
+    if (isset($_POST['getFilter'])) {
+        if (isset($_POST['sorting'])) {
+            $value = $_POST['sorting'];
+            // var_export($value);
+            if ($value == 'DESC') {
+                $products = $productObj->sortProductsByPriceDESC($products, 'productPrice');
+            } else if ($value == 'ASC') {
+                $products = $productObj->sortProductsByPriceASC($products, 'productPrice');
+            } else if ($value == 'nameZa') {
+                $products = $productObj->sortProductsByNameDESC($products, 'productName');
+            } else if ($value == 'nameAz') {
+                $products = $productObj->sortProductsByNameASC($products, 'productName');
+            }
+        }
     }
 }
-if ($sortValue == null || $sortValue == "empty") {
-    $products = $productObj->getProducts();
-} else if ($sortValue == "sortASC") {
-    $products = $productObj->getProductsAscOrder();
-} else if ($sortValue = "sortDESC") {
-    $products = $productObj->getProductsDescOrder();
-}
 
-
-
+$filterValue = null;
 
 //Add to cart item
-$cartObj = new Cart();
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     if (isset($_POST['product_submit'])) {
-        $cartObj->addToCart($_POST['productID']);
+        $productID = $_POST['productID'];
+        $exists = false;
+        foreach ($currentProductsInCart as $value => $key) {
+            if ($key['productID'] == $productID) {
+                $exists = true;
+            }
+        }
+        if ($exists == false) {
+            $cartObj->addToCart($_POST['productID']);
+            header("Location:" . $_SERVER['PHP_SELF']);
+        } else {
+            echo '<script> alert("This product is already in your cart"); </script>';
+        }
     }
 }
 
-//Filter by product type
-$filterValue = null;
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    if (isset($_POST['get_filter'])) {
-        $filterValue = $_POST['filter_value'];
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['getFilter'])) {
+        $minPrice = '';
+        $maxPrice = '';
+        $checkBoxFilters = array();
+        foreach ($_POST as $key => $value) {
+            if ($value == 'on') {
+                $checkBoxFilters[] = $key;
+            } else if (is_numeric($value)) {
+                if ($key == 'minPrice') {
+                    $minPrice = $value;
+                    $_SESSION['minPrice'] = $value;
+                } else if ($key == 'maxPrice') {
+                    $maxPrice = $value;
+                    $_SESSION['maxPrice'] = $value;
+                }
+            }
+        }
+        $products = $productObj->getFilteredProducts($checkBoxFilters, $minPrice, $maxPrice);
     }
 }
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['resetFilters'])) {
+        $_SESSION['minPrice'] = "";
+        $_SESSION['maxPrice'] = "";
+    }
+}
+
 ?>
 
 
@@ -73,36 +112,86 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="/js/my.js"></script>
     <title>Candy shop</title>
     <link rel="stylesheet" href="includes/styles.css">
 </head>
 
 <body>
+    <form method="POST">
+        <div class="sidenav">
+            <button type="button" class="collapsible">Sort by</button>
+            <div class="content">
+                <label>Sort by:</label><br>
+                <select name="sorting" id="sorting">
+                    <option value="empty"></option>
+                    <option value="DESC">Descending order</option>
+                    <option value="ASC">Ascending order</option>
+                    <option value="nameAz">Order by name [A-Z]</option>
+                    <option value="nameZa">Order by name [Z-A]</option>
+                </select><br>
+            </div>
 
-    <div class="productsFilter">
-        <form action="" method="POST">
-            <label class="filter_index">Filters:</label><br>
-            <input class="filter_index" type="radio" name="filter_value" value="drink">
-            <label class="filter_index">Drinks</label><br>
-            <input type="radio" name="filter_value" value="snack">
-            <label class="filter_index">Snacks</label><br>
-            <input type="radio" name="filter_value" value="showAll">
-            <label class="filter_index">Show all</label><br>
-            <button class="product_filter_index" type="submit" name="get_filter">Filter</button>
-        </form>
-    </div>
+            <button type="button" class="collapsible">Type</button>
+            <div class="content">
+                <label>Drinks</label>
+                <input type="checkbox" id="checkBox" name="drink"><br>
+                <label>Snacks</label>
+                <input type="checkbox" id="checkBox" name="snack"><br>
+                <label>Cookies</label>
+                <input type="checkbox" id="checkBox" name="cookies">
+            </div>
 
-    <div class="productsSortBy">
-        <form method="POST">
-            <label class="filter_index" style="margin-top:10px;">Sort by:</label>
-            <select name="sortBy" id="sortBy">
-                <option name="sort_value" value="empty"></option>
-                <option name="sort_value" value="sortDESC">Sort by price DESC </option>
-                <option name="sort_value" value="sortASC">Sort by price ASC</option>
-            </select>
-            <button class="product_filter_index" type="submit" name="submit_sort_value">Sort by</button>
-        </form>
-    </div>
+            <button type="button" class="collapsible">Price</button>
+            <div class="content">
+                <label>Min price</label><br>
+                <input type="text" name="minPrice" value="<?php echo $_SESSION['minPrice']; ?>"><br>
+                <label>Max price</label><br>
+                <input type="text" name="maxPrice" value="<?php echo $_SESSION['maxPrice']; ?>">
+            </div>
+        </div>
+        <div>
+            <input type="submit" value="Filter" name="getFilter" style="
+            position:fixed; 
+            margin-top:865px; 
+            margin-left: 10px;
+            background-color: #222;
+            border-radius: 4px;
+            border-style: none;
+            box-sizing: border-box;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+            line-height: 1.5;
+            outline: none;
+            overflow: hidden;
+            padding: 9px 20px 8px;
+            text-align: center;
+            width: 130px;
+            ">
+            <input type="submit" name="resetFilters" value="Reset filters" onClick="unCheck()" style="
+            position:fixed; 
+            margin-top:865px; 
+            margin-left: 180px;
+            background-color: #222;
+            border-radius: 4px;
+            border-style: none;
+            box-sizing: border-box;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+            line-height: 1.5;
+            outline: none;
+            overflow: hidden;
+            padding: 9px 20px 8px;
+            text-align: center;
+            width: 130px;
+            ">
+        </div>
+    </form>
+
+
 
     <div class="row1">
 
@@ -123,9 +212,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                         <form method="post">
                             <input type="hidden" name="productID" value="<?php echo $product['productID']; ?>">
                             <!-- <input type="hidden" name="userID" value="<?php echo 1; ?>"> -->
-                            <?php if(isset($_SESSION['userID'])) { ?>
-                                <button class="product_submit_index" type="submit" name="product_submit">Add to Cart</button>
-                            <?php } else {
+                            <button class="product_submit_index" type="submit" name="product_submit">Add to Cart</button>
 
                             } ?>
                         </form>
@@ -147,11 +234,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                         <form method="post">
                             <input type="hidden" name="productID" value="<?php echo $product['productID']; ?>">
                             <input type="hidden" name="userID" value="<?php echo 1; ?>">
-                            <?php if(isset($_SESSION['userID'])) { ?>
-                                <button class="product_submit_index" type="submit" name="product_submit">Add to Cart</button>
-                            <?php }  else {
-
-                            } ?>
+                            <button class="product_submit_index" type="submit" name="product_submit">Add to Cart</button>
                         </form>
                     </div>
                 </div>
@@ -159,19 +242,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             }
         }
         ?>
-
-
-
-
-
-
-
-
-
-
-
     </div>
-
 </body>
 
 </html>
@@ -179,3 +250,33 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 <?php
 require 'footer.php';
 ?>
+
+<style>
+
+</style>
+
+<script>
+
+    function unCheck() {
+
+        $('input[type=checkbox]').each(function() {
+            this.checked = false;
+        });
+
+    }
+
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        });
+    }
+</script>

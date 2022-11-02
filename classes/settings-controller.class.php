@@ -27,26 +27,16 @@ class SettingsController extends Settings
         if ($this->checkEmailEmptyFields() == false) {
             header("location: ../settings.php?error=emptyfields");
             exit();
-        }
-
-        if ($this->checkNewEmailIsValid() == false) {
+        } else if ($this->checkNewEmailIsValid() == false) {
             header("location: ../settings.php?error=newemailnotvalid");
             exit();
-        }
-
-        if ($this->checkRepeatedEmailIsValid() == false) {
+        } else if ($this->checkRepeatedEmailIsValid() == false) {
             header("location: ../settings.php?error=repeatedemailnotvalid");
             exit();
-        }
-
-        if ($this->checkEmailsAreEqual() == false) {
+        } else if ($this->checkEmailsAreEqual() == false) {
             header("location: ../settings.php?error=emailsnotequal&newEmail=" . $this->newEmail . "&repeatedEmail=" . $this->repeatedEmail);
             exit();
-        }
-        // if ($this->checkEmailsAreEqual() == true && $this->checkNewEmailIsValid() == true && $this->checkRepeatedEmailIsValid() == true && $this->checkEmailsAreEqual() == true) {
-        //     header("location: ../settings.php?success=emailhasbeenchanged");
-        //     exit();
-        // }
+        } 
 
         $this->changeEmail($this->newEmail, $this->currentEmail);
     }
@@ -175,14 +165,16 @@ class SettingsController extends Settings
     private $lastName;
     private $phoneNumber;
     private $companyName;
+    private $education;
 
-    public function setPersonalInformationValues($firstName, $profession, $lastName, $phoneNumber, $companyName)
+    public function setPersonalInformationValues($firstName, $profession, $lastName, $phoneNumber, $companyName, $education)
     {
         $this->firstName = $firstName;
         $this->profession = $profession;
         $this->lastName = $lastName;
         $this->phoneNumber = $phoneNumber;
         $this->companyName = $companyName;
+        $this->education = $education;
     }
 
     public function changePersonalInformation()
@@ -213,7 +205,12 @@ class SettingsController extends Settings
             exit();
         }
 
-        $this->setPersonalInformation($this->firstName, $this->lastName, $this->profession, $this->phoneNumber, $this->companyName);
+        if ($this->educationHandling() == false) {
+            header("location: ../settings.php?error=educationstartswithuppercase");
+            exit();
+        }
+
+        $this->setPersonalInformation($this->firstName, $this->lastName, $this->profession, $this->phoneNumber, $this->companyName, $this->education);
     }
 
     private function firstNameHandling()
@@ -294,6 +291,24 @@ class SettingsController extends Settings
 
         if (!empty($this->phoneNumber)) {
             if (!preg_match("/^[0-9]*$/", $this->phoneNumber)) {
+                $result = false;
+            } else {
+                $result = true;
+            }
+        } else {
+            $result = true;
+        }
+
+        return $result;
+    }
+
+    private function educationHandling()
+    {
+        $result;
+
+        if (!empty($this->lastName)) {
+            //Checks if word starts with uppercase
+            if (!preg_match('~^\p{Lu}~u', $this->education)) {
                 $result = false;
             } else {
                 $result = true;

@@ -40,6 +40,15 @@ require 'header.php';
                     echo '<p class="signup-error">Your current password is wrong!</p>';
                 } elseif ($_GET['error'] == "wrongemail") {
                     echo '<p class="signup-error">Your current email is wrong!</p>';
+                } 
+            } 
+            if(isset($_GET['success'])) {
+                if($_GET['success'] == "emailchanged") {
+                    echo '<script> alert("Email has been changed");  </script>';
+                } else if($_GET['success'] == "passwordchanged") {
+                    echo '<script> alert("Password has been changed");  </script>';
+                } else if($_GET['success'] == "informationchanged") {
+                    echo '<script> alert("Personal information has been updated");  </script>';
                 }
             }
             ?>
@@ -59,8 +68,8 @@ require 'header.php';
                         <form action="includes/settingsAction.inc.php" method="POST">
                             <p>First name:</p>
                             <input class="settingsInput" type="text" name="firstName" placeholder="First name" value='<?php echo $_SESSION['firstName'] ?>'>
-                            <p>Email address:</p>
-                            <input class="settingsInput" type="text" name="emailAddress" placeholder="Email address" value='<?php echo $_SESSION['userEmail']; ?>'>
+                            <p>Education:</p>
+                            <input class="settingsInput" type="text" name="education" placeholder="Education" value='<?php echo $_SESSION['education'] ?>'>
                             <p>Profession:</p>
                             <input class="settingsInput" type="text" name="profession" placeholder="Profession" value='<?php echo $_SESSION['profession'] ?>'>
                     </div>

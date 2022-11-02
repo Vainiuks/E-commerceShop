@@ -5,7 +5,7 @@ class Settings extends Database
 {
 
 
-    public function setPersonalInformation($firstName, $lastName, $profession, $phoneNumber, $companyName)
+    public function setPersonalInformation($firstName, $lastName, $profession, $phoneNumber, $companyName, $education)
     {
 
         // Logged in user ID
@@ -21,9 +21,9 @@ class Settings extends Database
         }
 
         if ($getPersonalInfo->rowCount() == 0) {
-            $insertPersonalInformation = $this->connect()->prepare('INSERT INTO personalinfo(firstName, lastName, phoneNumber, profession, companyName, userID) VALUES(?,?,?,?,?,?);');
+            $insertPersonalInformation = $this->connect()->prepare('INSERT INTO personalinfo(firstName, lastName, phoneNumber, profession, companyName, education, userID) VALUES(?,?,?,?,?,?,?);');
 
-            if (!$insertPersonalInformation->execute(array($firstName, $lastName, $profession, $phoneNumber, $companyName, $userID))) {
+            if (!$insertPersonalInformation->execute(array($firstName, $lastName, $profession, $phoneNumber, $companyName, $education, $userID))) {
                 $insertPersonalInformation = null;
                 header("location: ../settings.php?error=sqlerror");
                 exit();
@@ -34,13 +34,14 @@ class Settings extends Database
             $_SESSION['phoneNumber'] = $phoneNumber;
             $_SESSION['profession'] = $profession;
             $_SESSION['companyName'] = $companyName;
+            $_SESSION['education'] = $education;
 
             $getPersonalInfo = null;
             $insertPersonalInformation = null;
         } else {
-            $updatePersonalInformation = $this->connect()->prepare('UPDATE personalinfo SET firstName=?, lastName=?, phoneNumber=?, profession=?, companyName=? WHERE userID=?;');
+            $updatePersonalInformation = $this->connect()->prepare('UPDATE personalinfo SET firstName=?, lastName=?, phoneNumber=?, profession=?, companyName=?, education=? WHERE userID=?;');
 
-            if (!$updatePersonalInformation->execute(array($firstName, $lastName, $phoneNumber, $profession, $companyName, $userID))) {
+            if (!$updatePersonalInformation->execute(array($firstName, $lastName, $phoneNumber, $profession, $companyName, $education, $userID))) {
                 $updatePersonalInformation = null;
                 header("location: ../settings.php?error=sqlerror");
                 exit();
@@ -51,6 +52,7 @@ class Settings extends Database
             $_SESSION['phoneNumber'] = $phoneNumber;
             $_SESSION['profession'] = $profession;
             $_SESSION['companyName'] = $companyName;
+            $_SESSION['education'] = $education;
 
             $updatePersonalInformation = null;
         }
