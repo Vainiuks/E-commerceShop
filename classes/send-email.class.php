@@ -21,13 +21,13 @@ class Email {
             $mail->isSMTP(true);                                            
             $mail->Host       = 'smtp.gmail.com';                   
             $mail->SMTPAuth   = true;                                   
-            $mail->Username   = 'vainius.daraskevicius@gmail.com';                     
-            $mail->Password   = 'pqoeorflwjdorhhy';                              
+            $mail->Username   = 'test@gmail.com';                     
+            $mail->Password   = 'test';                              
             $mail->SMTPSecure = 'ssl';            
             $mail->Port       = 465;                                    
         
-            $mail->setFrom('vainius.daraskevicius@gmail.com');
-            $mail->addAddress('vainius.daraskevicius@gmail.com');     
+            $mail->setFrom('test@gmail.com');
+            $mail->addAddress('test@gmail.com');     
         
             $orderPrice = 0;
             $cartCount = count($productsArr);
