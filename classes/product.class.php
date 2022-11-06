@@ -21,9 +21,7 @@ class Product extends Database
 
     }
 
-    public function getProductsAscOrder() 
-    {
-        // $dbConn = new Database();
+    public function getProductsAscOrder() {
         $prepareStmt = $this->connect()->prepare('SELECT * FROM product ORDER BY productPrice ASC;');
         $prepareStmt->execute();
 
@@ -128,8 +126,6 @@ class Product extends Database
             $query .= $priceQuery;
         }
 
-  
-
         $prepareStmt = $this->connect()->prepare($query);
 
         if ($parameters) {
@@ -144,10 +140,6 @@ class Product extends Database
         while($row = $prepareStmt->fetch(PDO::FETCH_ASSOC)) {
             $productArray[] = $row;
         }
-        // var_export($parameters);
-        // var_export($query);
-        // var_export($productArray);
-        // die();
 
         return $productArray;
     } 

@@ -15,11 +15,6 @@ $_SESSION['minPrice'] = "";
 $_SESSION['maxPrice'] = "";
 
 
-// echo '<script type="text/javascript">
-//        window.onload = function () { alert("Welcome"); } 
-// </script>'; 
-
-
 //Search
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     if (isset($_POST['search_button_submit'])) {
@@ -79,6 +74,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $maxPrice = '';
         $checkBoxFilters = array();
         foreach ($_POST as $key => $value) {
+            if($key == 'drink') {
+                $_SESSION['drinkFilter'] = 'drink';
+            }
+            if($key == 'snack') {
+                $_SESSION['snackFilter'] = 'snack';
+            }
+            if($key == 'cookies') {
+                $_SESSION['cookiesFilter'] = 'cookies';
+            }
             if ($value == 'on') {
                 $checkBoxFilters[] = $key;
             } else if (is_numeric($value)) {
@@ -99,6 +103,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['resetFilters'])) {
         $_SESSION['minPrice'] = "";
         $_SESSION['maxPrice'] = "";
+        $_SESSION['drinkFilter'] = '';
+        $_SESSION['cookiesFilter'] = '';
+        $_SESSION['snackFilter'] = '';
     }
 }
 
@@ -136,11 +143,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <button type="button" class="collapsible">Type</button>
             <div class="content">
                 <label>Drinks</label>
-                <input type="checkbox" id="checkBox" name="drink"><br>
+                <input type="checkbox" id="checkBox" name="drink" <?php if(!empty($_SESSION['drinkFilter'])) echo "checked='checked'"; ?> /><br>
                 <label>Snacks</label>
-                <input type="checkbox" id="checkBox" name="snack"><br>
+                <input type="checkbox" id="checkBox" name="snack" <?php if(!empty($_SESSION['snackFilter'])) echo "checked='checked'"; ?> /><br>
                 <label>Cookies</label>
-                <input type="checkbox" id="checkBox" name="cookies">
+                <input type="checkbox" id="checkBox" name="cookies" <?php if(!empty($_SESSION['cookiesFilter'])) echo "checked='checked'"; ?> />
             </div>
 
             <button type="button" class="collapsible">Price</button>
@@ -170,7 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             text-align: center;
             width: 130px;
             ">
-            <input type="submit" name="resetFilters" value="Reset filters" onClick="unCheck()" style="
+            <input type="submit" name="resetFilters" value="Reset filters" style="
             position:fixed; 
             margin-top:865px; 
             margin-left: 180px;

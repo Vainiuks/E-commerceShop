@@ -11,7 +11,6 @@ if (isset($_POST['loginSubmit'])) {
 
     $loginController = new LoginController($username, $password);
 
-
     $loginController->loginUser();
 
     //Going back to index page after logging in

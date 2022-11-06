@@ -16,7 +16,6 @@ require 'header.php';
 
 <?php
 
-//Handling error and show them on screen not in url
 if (isset($_GET['error'])) {
     if ($_GET['error'] == "emptyfields") {
         echo '<p class="signup-error">Fill in all fields!</p>';
@@ -26,15 +25,6 @@ if (isset($_GET['error'])) {
         echo '<p class="signup-error">Wrong password!</p>';
     }
 }
-//   else if (isset($_GET['signup'])) {
-//       if($_GET['signup'] == "success") {
-//           echo '<p class="signup-success">You were signed up successfully!</p>';
-//       }
-//       else {
-
-//       }
-//   }
-
 ?>
 
 <div class="index-login-login">

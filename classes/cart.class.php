@@ -1,6 +1,6 @@
 <?php
 require_once 'database.class.php';
-// require 'send-email.class.php';
+require_once 'send-email.class.php';
 session_start();
 class Cart extends Database {
 
@@ -130,7 +130,7 @@ class Cart extends Database {
     public function insertPurchasesProducts() {
 
         // $dbConn = new Database();
-        $mail = new Email;
+        $mail = new EmailSender();
         $productsArr = array();
         $productsArr = $this->getProductsFromCart();
         $receiptID = array();
@@ -151,6 +151,7 @@ class Cart extends Database {
                 exit();
             }
         }
+        
         $mail->sendEmail($productsArr);
         $this->clearCartItems();
 
@@ -158,13 +159,12 @@ class Cart extends Database {
 
      //Clear rows in temporary table
      public function clearCartItems() {
-
         // $dbConn = new Database();
         $userID = $this->getUserID();
         $prepareStmt = $this->connect()->prepare("DELETE FROM cartItem WHERE userID = $userID;");
 
         if($prepareStmt->execute()) {
-            // header("location: ../index.php?error=none");
+            echo "<script> window.location.href='../index.php'; </script>";
         }
     }
 

@@ -17,9 +17,7 @@ class Admin extends Database
 
     }
 
-    public function uploadPicture($fileName, $fileTempName, $fileSize, $fileError, $fileType)
-    {
-
+    public function uploadPicture($fileName, $fileTempName, $fileSize, $fileError, $fileType) {
         $fileExt = explode('.', $fileName);
         $fileActualExt = strtolower(end($fileExt));
 
