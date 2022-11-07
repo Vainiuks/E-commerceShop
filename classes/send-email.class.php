@@ -23,10 +23,11 @@ class EmailSender {
                 $mail->Host       = 'smtp.gmail.com';                   
                 $mail->SMTPAuth   = true;                                   
                 $mail->Username   = 'vainius.daraskevicius@gmail.com';                     
-                $mail->Password   = 'wbwsjvhugarfdkec';                              
+                $mail->Password   = '';                              
                 $mail->SMTPSecure = 'ssl';            
                 $mail->Port       = 465;                                    
             
+                //added
                 $mail->setFrom('vainius.daraskevicius@gmail.com');
                 $mail->addAddress('vainius.daraskevicius@gmail.com');     
             
