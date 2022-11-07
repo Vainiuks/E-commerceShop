@@ -101,7 +101,7 @@ class Product extends Database
         return $productArray;
     }
 
-    public function getFilteredProducts($checkBoxValues, $minPrice, $maxPrice) {
+    public function getFilteredProducts($checkBoxValues, $minPrice, $maxPrice, $sortByPrice, $sortByName) {
         $sql = [];
         $parameters = [];
 
@@ -125,6 +125,14 @@ class Product extends Database
             $parameters[] = $maxPrice;
             $query .= $priceQuery;
         }
+
+        $sortQuery = '';
+        if(!empty($sortByPrice) || $sortByPrice != '') {
+            $sortQuery = " ORDER BY  productPrice {$sortByPrice} ";
+        } else if (!empty($sortByName) || $sortByName != '') {
+            $sortQuery = " ORDER BY  productName {$sortByName} ";
+        }
+        $query .= $sortQuery;
 
         $prepareStmt = $this->connect()->prepare($query);
 

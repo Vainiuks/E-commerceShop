@@ -29,23 +29,23 @@ if ($searchValue == null) {
     $products = $productObj->getProductsBySearchInput($searchValue);
 }
 //Sort
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    if (isset($_POST['getFilter'])) {
-        if (isset($_POST['sorting'])) {
-            $value = $_POST['sorting'];
-            // var_export($value);
-            if ($value == 'DESC') {
-                $products = $productObj->sortProductsByPriceDESC($products, 'productPrice');
-            } else if ($value == 'ASC') {
-                $products = $productObj->sortProductsByPriceASC($products, 'productPrice');
-            } else if ($value == 'nameZa') {
-                $products = $productObj->sortProductsByNameDESC($products, 'productName');
-            } else if ($value == 'nameAz') {
-                $products = $productObj->sortProductsByNameASC($products, 'productName');
-            }
-        }
-    }
-}
+// if ($_SERVER['REQUEST_METHOD'] == "POST") {
+//     if (isset($_POST['getFilter'])) {
+//         if (isset($_POST['sorting'])) {
+//             $value = $_POST['sorting'];
+//             // var_export($value);
+//             if ($value == 'DESC') {
+//                 $products = $productObj->sortProductsByPriceDESC($products, 'productPrice');
+//             } else if ($value == 'ASC') {
+//                 $products = $productObj->sortProductsByPriceASC($products, 'productPrice');
+//             } else if ($value == 'nameZa') {
+//                 $products = $productObj->sortProductsByNameDESC($products, 'productName');
+//             } else if ($value == 'nameAz') {
+//                 $products = $productObj->sortProductsByNameASC($products, 'productName');
+//             }
+//         }
+//     }
+// }
 
 $filterValue = null;
 
@@ -72,7 +72,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['getFilter'])) {
         $minPrice = '';
         $maxPrice = '';
+        $sortByPrice = '';
+        $sortByName = '';
         $checkBoxFilters = array();
+        if (isset($_POST['sorting'])) {
+            $value = $_POST['sorting'];
+            if($value == 'DESC') {
+                $sortByPrice = 'DESC';
+                $_SESSION['sortType'] = 'DESC';
+            } else if ($value == 'ASC') {
+                $sortByPrice = 'ASC';
+                $_SESSION['sortType'] = 'ASC';
+            }
+            if($value == 'nameAz') {
+                $sortByName = 'ASC';
+                $_SESSION['sortType'] = 'nameAz';
+            } else if ($value == 'nameZa') {
+                $sortByName = 'DESC';
+                $_SESSION['sortType'] = 'nameZa';
+            }
+        }
+
         foreach ($_POST as $key => $value) {
             if($key == 'drink') {
                 $_SESSION['drinkFilter'] = 'drink';
@@ -95,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
             }
         }
-        $products = $productObj->getFilteredProducts($checkBoxFilters, $minPrice, $maxPrice);
+        $products = $productObj->getFilteredProducts($checkBoxFilters, $minPrice, $maxPrice, $sortByPrice, $sortByName);
     }
 }
 
@@ -106,10 +126,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['drinkFilter'] = '';
         $_SESSION['cookiesFilter'] = '';
         $_SESSION['snackFilter'] = '';
+        $_SESSION['sortType'] = 'empty';
     }
 }
-
 ?>
+
+
 
 
 <!DOCTYPE html>
@@ -132,11 +154,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="content">
                 <label>Sort by:</label><br>
                 <select name="sorting" id="sorting">
-                    <option value="empty"></option>
-                    <option value="DESC">Descending order</option>
-                    <option value="ASC">Ascending order</option>
-                    <option value="nameAz">Order by name [A-Z]</option>
-                    <option value="nameZa">Order by name [Z-A]</option>
+                    <option value="empty" <?=$_SESSION['sortType'] == 'empty' ? ' selected="selected"' : '';?>></option>
+                    <option value="DESC" <?=$_SESSION['sortType'] == 'DESC' ? ' selected="selected"' : '';?>>Descending order</option>
+                    <option value="ASC" <?=$_SESSION['sortType'] == 'ASC' ? ' selected="selected"' : '';?>>Ascending order</option>
+                    <option value="nameAz" <?=$_SESSION['sortType'] == 'nameAz' ? ' selected="selected"' : '';?>>Order by name [A-Z]</option>
+                    <option value="nameZa" <?=$_SESSION['sortType'] == 'nameZa' ? ' selected="selected"' : '';?>>Order by name [Z-A]</option>
                 </select><br>
             </div>
 
@@ -286,4 +308,7 @@ require 'footer.php';
             }
         });
     }
+
+    var mySelect = document.getElementById("sorting");
+    mySelect.options.selectedIndex = <?php echo $_SESSION["sortType"]; ?>
 </script>

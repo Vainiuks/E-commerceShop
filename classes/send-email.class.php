@@ -4,6 +4,7 @@ require_once 'PHPMailer/src/PHPMailer.php';
 require_once 'PHPMailer/src/SMTP.php';
 require_once 'PHPMailer/src/Exception.php';
 
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
@@ -22,7 +23,7 @@ class EmailSender {
                 $mail->Host       = 'smtp.gmail.com';                   
                 $mail->SMTPAuth   = true;                                   
                 $mail->Username   = 'vainius.daraskevicius@gmail.com';                     
-                $mail->Password   = '';                              
+                $mail->Password   = 'wbwsjvhugarfdkec';                              
                 $mail->SMTPSecure = 'ssl';            
                 $mail->Port       = 465;                                    
             
@@ -50,12 +51,13 @@ class EmailSender {
                  foreach($productsArr as $product => $value) {
                     $mail->Body .=
                     "<tr style='border-collapse: collapse; border: 1px solid;'>"
-                    . "<td style='border-collapse: collapse; border: 1px solid;'><img src=/'" . $value['productImage'] . "' alt='' border=3 height=50 width=50</img></td>"
+                    . "<td style='border-collapse: collapse; border: 1px solid;'><img src='cid:imageName' alt='' border=3 height=50 width=50</img></td>"
                     . "<td style='border-collapse: collapse; border: 1px solid;'>" . $value['productName'] . "</td>" 
                     . "<td style='border-collapse: collapse; border: 1px solid;'>" . $value['productPrice'] . "</td>" 
                     . "<td style='border-collapse: collapse; border: 1px solid;'>" . $value['quantity'] . "</td>" 
                     . "<td style='border-collapse: collapse; border: 1px solid;'>" . $value['productPrice'] * $value['quantity'] . "</td>";
                     $orderPrice += $value['productPrice'] * $value['quantity'];
+                    $mail->addEmbeddedImage(dirname(__FILE__) .  $value['productImage'], 'imageName');
                     $counter++;
                     if($counter == $cartCount) {
                         $mail->Body .= "<td style='border-collapse: collapse; border: 1px solid;'>" . $orderPrice . "</td>"; 
@@ -64,8 +66,9 @@ class EmailSender {
                  }
                 $mail->Body .= "</table>";
     
-                $lol =  $mail->send();
-                 return $lol;
+                // $lol =  
+                $mail->send();
+                //  return $lol;
             } catch (Exception $e) {
                 echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
             }
